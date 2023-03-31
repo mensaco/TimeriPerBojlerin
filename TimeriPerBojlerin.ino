@@ -1,9 +1,10 @@
 double second = 329670.32967;
 long LP = (long) (10 * second);
-long HP = (long) (1 * second);
+long HP = (long) (0.25 * second);
 
 long lowPeriod = LP;
 long highPeriod = HP;
+
 bool reset = false;
 bool isOn = false;
 int pwm = 200;
@@ -27,6 +28,7 @@ void turnOff() {
 void ensureReset(){
   if(reset == true){ // interrupt request
     reset = false; 
+    // prevent any initialization glitches
     lowPeriod = LP;
     highPeriod = HP;
     turnOff(); 
@@ -39,6 +41,8 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(PD3,OUTPUT);
   turnOff();
+  lowPeriod = 0;
+  highPeriod = 0;
   reset = false;
   attachInterrupt(digitalPinToInterrupt(2),onInterrupt,RISING); 
 }
